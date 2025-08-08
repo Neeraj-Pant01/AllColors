@@ -20,7 +20,7 @@ exports.getAUser = async (userId) => {
     return response;
 }
 
-exports.deleteUser = async (userId) => {
+exports.disableUser = async (userId) => {
     const response = await userModel.findByIdAndUpdate(userId, {
         $set: { isDeleted: true }
     }, {
@@ -29,6 +29,10 @@ exports.deleteUser = async (userId) => {
     })
     if (!response) throw createError(404, 'user not found !')
     return { message: "user deled successfully !" }
+}
+
+exports.deleteUser = async (userId) =>{
+    
 }
 
 exports.updatePassword = async (userId, oldPassword, newPassWord) => {
@@ -45,3 +49,5 @@ exports.updatePassword = async (userId, oldPassword, newPassWord) => {
     await user.save();
     return {message:"updated password successfully !"}
 }
+
+exports
