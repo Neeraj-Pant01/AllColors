@@ -2,7 +2,7 @@ const userModel = require("../models/user.model")
 const { createError } = require("../utils/createError")
 const bcryptJS = require("bcryptjs");
 
-exports.updateUser = async (userId, updateData) => {
+exports.updateUserService = async (userId, updateData) => {
     if (updateData.password) throw createError(403, "cannot updadte password !")
     const response = await userModel.findByIdAndUpdate(userId, {
         $set: updateData
@@ -14,13 +14,13 @@ exports.updateUser = async (userId, updateData) => {
     return response;
 }
 
-exports.getAUser = async (userId) => {
+exports.getAUserService = async (userId) => {
     const response = await userModel.findById(userId).populate('CreatorProfile')
     if (!response) throw createError(404, "user not found !")
     return response;
 }
 
-exports.disableUser = async (userId) => {
+exports.disableUserService = async (userId) => {
     const response = await userModel.findByIdAndUpdate(userId, {
         $set: { isDeleted: true }
     }, {
@@ -35,7 +35,7 @@ exports.deleteUser = async (userId) =>{
     
 }
 
-exports.updatePassword = async (userId, oldPassword, newPassWord) => {
+exports.updatePasswordService = async (userId, oldPassword, newPassWord) => {
     const user = await userModel.findById(userId);
     if (!user) throw createError(404, 'user not found !')
     const oldPass = oldPassword;
@@ -50,4 +50,15 @@ exports.updatePassword = async (userId, oldPassword, newPassWord) => {
     return {message:"updated password successfully !"}
 }
 
-exports
+exports.getAllUsers = async (q,page, limit) =>{
+    const {search, userName, email, mobile, isCreator, isDeleted, userId} = q;
+    const filters = {
+        ...(search && {
+            $or:[
+                {userName : {$regex: search, $options: 'i'}},
+                {email : {$regex: search, $options: 'i' }}
+            ]
+        })
+    }
+    const users = await userModel
+}

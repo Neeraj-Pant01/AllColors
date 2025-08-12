@@ -7,6 +7,7 @@ const compression = require("compression")
 const swaggerSpec = require("./src/swagger/swagger")
 const swaggerUi = require("swagger-ui-express");
 const { sanitizeNoassign } = require("./src/middlewares/sanitize");
+const authRoute = require("./src/routes/auth.route");
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(compression())
 app.use(sanitizeNoassign)
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+app.use('/api/auth', authRoute)
 
 const PORT = process.env.PORT || 3000;
 
